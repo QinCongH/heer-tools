@@ -1,0 +1,34 @@
+import { call } from '@kit.TelephonyKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+/**
+ * @description 最小化返回桌面
+ */
+export const appMinimize = () => {
+	const currentWindow = UTSHarmony.getCurrentWindow()
+	currentWindow.minimize()
+}
+
+interface AppCallInterfaceResponse {
+	message : string
+	success : boolean
+}
+/**
+ * @description 拨打电话
+ */
+export const appMakeCall = async (tel : string)=> {
+	let hasCall : boolean = call.hasCallSync();
+	if (!hasCall) {
+		await call.makeCall(tel);
+		const result : AppCallInterfaceResponse = {
+			message: `makeCall success`,
+			success: true
+		}
+		return result;
+	} else {
+		const result : AppCallInterfaceResponse = {
+			message: `makeCall fail, promise: 正在通话中`,
+			success: false
+		}
+		return result;
+	}
+}
